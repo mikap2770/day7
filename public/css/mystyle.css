@@ -1,12 +1,12 @@
-#div1{
+#header{
     background-color: aqua;
 }
-#div2{
+#menu{
     background-color:brown;
 }
-#div3{
+#content{
     background-color:cornsilk;
 }
-#div4{
+#footer{
     background-color:darkgray;
 }
