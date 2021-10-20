@@ -10,6 +10,7 @@
     
 
 }
+
 #menu ul li{
     list-style: none;
     text-decoration:none;   
@@ -19,6 +20,7 @@
 }
 #content{
     background-color:cornsilk;
+    margin-left: 160px;
 }
 #footer{
     background-color:darkgray;
@@ -28,4 +30,17 @@ html,
 body {
 	height: 100%;
 	width: 100%;
+}
+.myforms{
+	border-color: black;
+	border-style: solid;
+	border-radius: 20px;
+	padding: 50px;
+	width: 200px;
+}
+#sourceForm{
+	background-color: yellow;
+}
+#targetForm{
+	background-color: lightgreen;
 }
