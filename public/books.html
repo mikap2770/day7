@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Books</h1>
+
+    <h2>All books</h2>
+    <p>
+      If you want to see the books click below button <br>
+      <button type="button" name="button" onclick="getBooks()">Show books</button>
+    </p>
+    <div id="results"></div>
+    <h2>Add book</h2>
+    <p>
+        <label for="addname">Bookname</label> <br>
+        <input type="text" id="addname"> <br>
+        <label for="addauthor">Author</label> <br>
+        <input type="text" id="addauthor"> <br>
+        <label for="addisbn">ISBN</label> <br>
+        <input type="text" id="addisbn"> <br>
+        <button onclick="addBook()">Add</button> <br>
+        <label for="" id="message"></label>
+    </p>
+</body>
+</html>
+<script>
+function getBooks() {
+    var xmlBooks = new XMLHttpRequest();
+    xmlBooks.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var data='<TABLE border="1">';
+            data+='<THEAD>';
+            data+='<tr><th>Id</th> <th>Name</th> <th>Author</th> <th>ISBN</th> </tr>';
+            data+='</THEAD>';
+            data+='<TBODY>';
+            var books=JSON.parse(this.response);
+            for(row in books) {
+            data+='<tr>';
+            data+='<td>'+books[row].id_book+'</td><td>'+books[row].name+'</td><td>'+books[row].author+'</td><td>'+books[row].isbn+'</td>';
+            data+='</tr>';
+            }
+            data+='</TBODY>';
+            data+='</TABLE>';
+
+            console.log(data);
+            document.getElementById("results").innerHTML = data;
+        }
+        else {
+            document.getElementById("results").innerHTML = "Cannot get data"; 
+        }
+    }
+    xmlBooks.open("GET", "http://localhost:3000/book");
+    userName=window.sessionStorage.getItem('userName');
+    passWord=window.sessionStorage.getItem('passWord');
+    xmlBooks.setRequestHeader('Authorization', "Basic " + btoa(userName+":"+passWord)); 
+
+    xmlBooks.send();
+}   
+
+
+function addBook() {
+    var name=document.getElementById("addname").value;
+    var author=document.getElementById("addauthor").value;
+    var isbn=document.getElementById("addisbn").value;
+    var postData = 
+    '{"name": "'+name+'", "author": "'+author+'",  "isbn": "'+isbn+'" }';
+
+	var url="http://localhost:3000/book";
+	var xmlBooks = new XMLHttpRequest();
+	xmlBooks.onreadystatechange = function() {
+		if (xmlBooks.readyState == 4 && xmlBooks.status == 200) {
+			document.getElementById('message').innerHTML = "Book added";
+            getBooks();
+		}
+		else {
+			document.getElementById('message').innerHTML = "Something went wrong";
+		}
+	};
+	xmlBooks.open('POST', url, true);
+    xmlBooks.setRequestHeader("Content-Type", "application/json");
+    userName=window.sessionStorage.getItem('userName');
+    passWord=window.sessionStorage.getItem('passWord');
+    xmlBooks.setRequestHeader('Authorization', "Basic " + btoa(userName+":"+passWord)); 
+	xmlBooks.send(postData);
+}
+
+</script>
